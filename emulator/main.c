@@ -30,7 +30,7 @@ int main(int argc, char **argv)
     // // On a une mémoire en mots de 32 bits
     // uint32_t memoire[4096] = {0};
 
-    const uint32_t adresseFinInstructions = lireInstructions(memoire, hex_input_file) + 1;
+    const uint32_t adresseFinInstructions = lireInstructions(memoire, hex_input_file) + 4;
 
     // On assigne les registres à 0 sauf sp qui est à 16384
     int64_t registres[32] = {0};
@@ -53,7 +53,7 @@ int main(int argc, char **argv)
 
     //! Phase d'exécution du programme
 
-    while (lire32bits(memoire, pc) != 0 && pc <= adresseFinInstructions) {
+    while (lire32bits(memoire, pc) != 0) {
         uint32_t instruction = lire32bits(memoire, pc);
 
         if (decodeExecuteInstruction(instruction, registres, &pc, memoire) != 0) {
@@ -68,6 +68,8 @@ int main(int argc, char **argv)
     for (int i = 0; i < 32; i++) {
         fprintf(sortie, "x%d: %lld\n", i, registres[i]);
     }
+
+    fclose(sortie);
 
     return 0;
 }

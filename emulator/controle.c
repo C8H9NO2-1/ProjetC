@@ -162,7 +162,7 @@ int decodeExecuteAddi(uint32_t instruction, int64_t registres[]) {
     int16_t imm = (instruction & IMM_I_MASK) >> 20;
 
     if (imm & 0b100000000000) {
-        imm |= 0b1111000000000000;
+        imm |= 0b1111100000000000;
     }
 
     if (rd != 0) {
@@ -178,7 +178,7 @@ int decodeExecuteLd(uint32_t instruction, int64_t registres[], uint8_t memoire[]
     int16_t imm = (instruction & IMM_I_MASK) >> 20;
 
     if (imm & 0b100000000000) {
-        imm |= 0b1111000000000000;
+        imm |= 0b1111100000000000;
     }
 
     // On récupère des données sur 64 bits
@@ -196,7 +196,7 @@ int decodeExecuteSd(uint32_t instruction, int64_t registres[], uint8_t memoire[]
     imm |= ((instruction & IMM_SD_MASK_2) >> 20);
 
     if (imm & 0b100000000000) {
-        imm |= 0b1111000000000000;
+        imm |= 0b1111100000000000;
     }
 
     ecrire64bits(memoire, registres[rs1] + imm, registres[rs2]);
@@ -216,10 +216,10 @@ int decodeExecuteB(uint32_t instruction, int64_t registres[], uint32_t *pc) {
     imm |= ((instruction & IMM_B_MASK_4) >> 19);
 
     if (imm & 0b1000000000000) {
-        imm |= 0b1110000000000000;
+        imm |= 0b1111000000000000;
     }
 
-    // printf("imm = %d\n", imm);
+    printf("imm = %d\n", imm);
 
     switch (funct3) {
         case FUNCT3_BEQ:
@@ -257,7 +257,7 @@ int decodeExecuteJal(uint32_t instruction, int64_t registres[], uint32_t *pc) {
     imm |= ((instruction & IMM_JAL_MASK_4) >> 11);
 
     if (imm & 0b100000000000000000000) {
-        imm |= 0b11111111111000000000000000000000;
+        imm |= 0b11111111111100000000000000000000;
     }
 
     if (rd != 0) {
