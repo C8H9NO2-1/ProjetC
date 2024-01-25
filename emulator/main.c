@@ -24,32 +24,17 @@ int main(int argc, char **argv)
 
     //! Phase d'initialisation du programme
 
-    // On a une mémoire en octets
+    // On défini une mémoir en octets
     uint8_t memoire[16384] = {0};
 
-    // // On a une mémoire en mots de 32 bits
-    // uint32_t memoire[4096] = {0};
-
-    const uint32_t adresseFinInstructions = lireInstructions(memoire, hex_input_file) + 4;
+    // On lit l'ensemble des instructions du programme en assembleur
+    lireInstructions(memoire, hex_input_file);
 
     // On assigne les registres à 0 sauf sp qui est à 16384
     int64_t registres[32] = {0};
     registres[2] = 16384; // On initialise sp à 16384
     uint32_t pc = 0; // On fait attention car on travaille avec une mémoire sur 32 bits
 
-    // // ? Dans la mémoire, les instructions sont stockées par octet et la plus petite adresse des 4 contient les bits de poids faible
-    // for (int i = 0; i < adresseFinInstructions; i += 4) {
-    //     printf("%02x", memoire[i + 3]);
-    //     printf("%02x", memoire[i + 2]);
-    //     printf("%02x", memoire[i + 1]);
-    //     printf("%02x", memoire[i]);
-    //     printf("\n");
-    // }
-
-    // for (uint32_t i = 0; i < adresseFinInstructions; i++) {
-    //     printf("%08x\n", memoire[i]);
-    // }
-    // printf("\n");
 
     //! Phase d'exécution du programme
 
@@ -57,6 +42,7 @@ int main(int argc, char **argv)
         uint32_t instruction = lire32bits(memoire, pc);
 
         if (decodeExecuteInstruction(instruction, registres, &pc, memoire) != 0) {
+            printf("Erreur lors de l'éxécution de l'instruction à l'adresse: %d", pc);
             return 1;
         }
 
